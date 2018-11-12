@@ -2,16 +2,13 @@
 Simple sentry with nginx reverse proxy
 
 
-
-Goal:
-
-Docker setup for hosting of Sentry application hosting
+Content:
   * docker-compose file
   * Dockerfile(s)
   * config file(s)
 
-@see https://sentry.io/welcome/
-@see https://github.com/getsentry/sentry
+    @see https://sentry.io/welcome/
+    @see https://github.com/getsentry/sentry
 
 
 Requirements:
