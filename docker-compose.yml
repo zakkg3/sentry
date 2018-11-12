@@ -21,8 +21,8 @@ services:
     links:
      - redis
      - postgres
-    ports:
-     - 9000:9000
+   # ports: TO DO  Add nginx reverproxy to get here
+   #  - 9000:9000
     environment:
       SENTRY_SECRET_KEY: '!!!SECRET!!!'
       SENTRY_POSTGRES_HOST: postgres
