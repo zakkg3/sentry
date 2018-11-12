@@ -16,8 +16,8 @@ Docker setup for hosting of Sentry application hosting
 
 Requirements:
 
-[]  Setup is for internal use
-[] Sentry application should not be publicly accessible
-[] An nginx proxy container should be publicly accessible,  and proxy the submission of
+*  Setup is for internal use
+* Sentry application should not be publicly accessible
+* An nginx proxy container should be publicly accessible,  and proxy the submission of
    browser events through  to the sentry application
-[] Only allow http requests to the proxy service   for event pushes ( see sentry documentation )
+* Only allow http requests to the proxy service   for event pushes ( see sentry documentation )
