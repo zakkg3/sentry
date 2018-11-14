@@ -17,3 +17,4 @@ docker-compose exec sentry sentry upgrade
 echo "Restarting server"
 docker-compose restart sentry
 echo "Nginx reverse-proxying in localhost:8000"
+# if there is arguments install docker-compose exec sentry pip install sentry-slack
