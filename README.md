@@ -16,3 +16,4 @@ Simple sentry with nginx reverse proxy
 
 Fork https://gist.github.com/denji/b801f19d95b7d7910982c22bb1478f96
 More info https://github.com/getsentry/onpremise/blob/master/docker-compose.yml
+https://docs.sentry.io/server/nginx/
