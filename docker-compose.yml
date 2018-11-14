@@ -22,7 +22,7 @@ services:
      - redis
      - postgres
     environment:
-      SENTRY_SECRET_KEY: '5!q*z+or6#%#6zx*4umohb7k10l(1&v17r=i+8rqk_hw-uh^ae'
+      SENTRY_SECRET_KEY: {{secret}}
       SENTRY_POSTGRES_HOST: postgres
       SENTRY_DB_USER: sentry
       SENTRY_DB_PASSWORD: sentry
@@ -35,7 +35,7 @@ services:
      - postgres
     command: "sentry run cron"
     environment:
-      SENTRY_SECRET_KEY: '5!q*z+or6#%#6zx*4umohb7k10l(1&v17r=i+8rqk_hw-uh^ae'
+      SENTRY_SECRET_KEY: {{secret}}
       SENTRY_POSTGRES_HOST: postgres
       SENTRY_DB_USER: sentry
       SENTRY_DB_PASSWORD: sentry
@@ -47,9 +47,8 @@ services:
      - redis
      - postgres
     command: "sentry run worker"
-    environment:
-      # example secret (regenerate with docker run --rm sentry config generate-secret-key)
-      SENTRY_SECRET_KEY: '5!q*z+or6#%#6zx*4umohb7k10l(1&v17r=i+8rqk_hw-uh^ae'
+    environment: #
+      SENTRY_SECRET_KEY: {{secret}}
       SENTRY_POSTGRES_HOST: postgres
       SENTRY_DB_USER: sentry
       SENTRY_DB_PASSWORD: sentry
