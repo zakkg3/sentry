@@ -1,9 +1,31 @@
 #!/bin/sh
-printf "verifing Requirements."
-if ! [ `sudo systemctl is-active docker` = "active" ];
- then
-  echo "We need docker running"
-  exit 1;
+printf "verifing Requirements.\n"
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)     machine=Linux;;
+    Darwin*)    machine=Mac;;
+    CYGWIN*)    machine=Cygwin;;
+    MINGW*)     machine=MinGw;;
+    *)          machine="UNKNOWN:${unameOut}"
+esac
+echo Machine ${machine} detected
+
+if [ ${machine} == "Mac" ]; then
+  docker info --format "{{.OperatingSystem}}" | grep -q "Docker for Mac"
+  if [[ $? -eq 0 ]]; then
+      echo "Docker for Mac!"
+  else
+      echo "Docker for mac not detected. Aborting."
+      exit 1;
+  fi
+elif [ ${machine} == "Linux" ]; then
+  if [ `sudo systemctl is-active docker` = "active" ];
+   then
+     echo "Docker for Linux"
+   else
+    echo "Docker for Linux not running. Aborting."
+    exit 1;
+  fi
 fi
 printf ". Docker OK ."
 command -v docker-compose --version >/dev/null 2>&1 || { echo >&2 "docker-compose not found.  Aborting."; exit 1; }
