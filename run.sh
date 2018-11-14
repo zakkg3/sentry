@@ -31,6 +31,7 @@ printf ". Docker OK ."
 command -v docker-compose --version >/dev/null 2>&1 || { echo >&2 "docker-compose not found.  Aborting."; exit 1; }
 printf ". Docker-compose OK .\n"
 echo "Creating secret"
+docker pull sentry
 sed -i "s/{{secret}}/$(docker run --rm sentry config generate-secret-key)/" docker-compose.yml
 echo "Running stack..."
 docker-compose up -d
