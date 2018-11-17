@@ -1,63 +1,59 @@
-version: '2'
 
-volumes:
-   pgdb:
+version: '3.4'
+
+x-defaults: &defaults
+  restart: unless-stopped
+  build: .
+  depends_on:
+    - redis
+    - postgres
+    - memcached
+    - smtp
+  env_file: .env
+  environment:
+    SENTRY_MEMCACHED_HOST: memcached
+    SENTRY_REDIS_HOST: redis
+    SENTRY_POSTGRES_HOST: postgres
+    SENTRY_EMAIL_HOST: smtp
+  volumes:
+    - sentry-data:/var/lib/sentry/files
+
 
 services:
+  smtp:
+    restart: unless-stopped
+    image: tianon/exim4
+
+  memcached:
+    restart: unless-stopped
+    image: memcached:1.5-alpine
+
   redis:
-    image: redis
+    restart: unless-stopped
+    image: redis:3.2-alpine
 
   postgres:
-    image: postgres
-    environment:
-      POSTGRES_USER: sentry
-      POSTGRES_PASSWORD: sentry
-      POSTGRES_DB: sentry
+    restart: unless-stopped
+    image: postgres:9.5
     volumes:
-     - pgdb:/var/lib/postgresql/data
+      - sentry-postgres:/var/lib/postgresql/data
 
-  sentry:
-    image: sentry
-    links:
-     - redis
-     - postgres
-    environment:
-      SENTRY_SECRET_KEY: {{secret}}
-      SENTRY_POSTGRES_HOST: postgres
-      SENTRY_DB_USER: sentry
-      SENTRY_DB_PASSWORD: sentry
-      SENTRY_REDIS_HOST: redis
+  web:
+    <<: *defaults
+    ports:
+      - '9000:9000'
 
   cron:
-    image: sentry
-    links:
-     - redis
-     - postgres
-    command: "sentry run cron"
-    environment:
-      SENTRY_SECRET_KEY: {{secret}}
-      SENTRY_POSTGRES_HOST: postgres
-      SENTRY_DB_USER: sentry
-      SENTRY_DB_PASSWORD: sentry
-      SENTRY_REDIS_HOST: redis
+    <<: *defaults
+    command: run cron
 
   worker:
-    image: sentry
-    links:
-     - redis
-     - postgres
-    command: "sentry run worker"
-    environment: #
-      SENTRY_SECRET_KEY: {{secret}}
-      SENTRY_POSTGRES_HOST: postgres
-      SENTRY_DB_USER: sentry
-      SENTRY_DB_PASSWORD: sentry
-      SENTRY_REDIS_HOST: redis
-  nginx:
-    image: nginx:latest
-    links:
-    - sentry
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    ports:
-      - 8000:80
+    <<: *defaults
+    command: run worker
+
+
+volumes:
+    sentry-data:
+      external: true
+    sentry-postgres:
+      external: true
