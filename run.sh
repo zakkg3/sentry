@@ -41,7 +41,6 @@ if [ $1 == "--init" ] ; then
   docker volume create --name=sentry-data && docker volume create --name=sentry-postgres
 fi
 
-
 echo "Running stack..."
 docker-compose up -d
 
@@ -52,4 +51,6 @@ if [ $1 == "--init" ] ; then
   docker-compose restart sentry
 fi
 echo "Nginx reverse-proxying in localhost:8000"
+IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker-compose ps -q sentry))
+echo For internal Access use http://$IP:9000
 #TO-DO if there is arguments install docker-compose exec sentry pip install sentry-slack
