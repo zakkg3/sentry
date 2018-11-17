@@ -3,9 +3,9 @@ if [ -z "$1" ]
   then
     echo "No argument supplied, please add the AUTH Token."
     echo "using example, test token."
-    export SENTRY_DSN=http://73f0839c97034a83be55ca6912659767@localhost:8000/1
+    export SENTRY_DSN=http://73f0839c97034a83be55ca6912659767@localhost:8000/2
 else
-  export SENTRY_DSN=http://$1@localhost:8000/4
+  export SENTRY_DSN=http://$1@localhost:8000/2
 fi
 command -v sentry-cli --version >/dev/null 2>&1 || { echo >&2 "sentry-cli not found.  Aborting."; exit 1; }
 
