@@ -8,7 +8,7 @@ else
   export SENTRY_DSN=$1
 fi
 
-#sentry-cli send-event -m "This is a test"
+sentry-cli send-event -m "This is a test" -m "Another thing here"
 
 eval "$(sentry-cli bash-hook)"
 if [ false ]; then
