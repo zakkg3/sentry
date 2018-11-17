@@ -27,9 +27,9 @@ elif [ ${machine} == "Linux" ]; then
     exit 1;
   fi
 fi
-printf ". Docker OK ."
+printf "Docker OK..."
 command -v docker-compose --version >/dev/null 2>&1 || { echo >&2 "docker-compose not found.  Aborting."; exit 1; }
-printf ". Docker-compose OK .\n"
+printf "Docker-compose OK .\n"
 echo "Creating secret"
 docker pull sentry
 sed -i "s/{{secret}}/$(docker run --rm sentry config generate-secret-key)/" docker-compose.yml
@@ -40,4 +40,4 @@ docker-compose exec sentry sentry upgrade
 echo "Restarting server"
 docker-compose restart sentry
 echo "Nginx reverse-proxying in localhost:8000"
-# if there is arguments install docker-compose exec sentry pip install sentry-slack
+#TO-DO if there is arguments install docker-compose exec sentry pip install sentry-slack
