@@ -32,7 +32,7 @@ printf "Docker OK..."
 command -v docker-compose --version >/dev/null 2>&1 || { echo >&2 "docker-compose not found.  Aborting."; exit 1; }
 printf "Docker-compose OK .\n"
 
-if [ $1 == "--init" ] ; then
+if [[ $1 == "--init" ]] ; then
   echo "running initialization"
   echo "Creating secret"
   docker pull sentry
@@ -44,7 +44,7 @@ fi
 echo "Running stack..."
 docker-compose up -d
 
-if [ $1 == "--init" ] ; then
+if [[ $1 == "--init" ]] ; then
   echo "Creating Db and User"
   docker-compose exec sentry sentry upgrade
   echo "Restarting server"
