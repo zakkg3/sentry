@@ -43,8 +43,8 @@ To use the test script you may need to create a auth_token and pass it as an arg
     ./test.sh: line 17: this-is-a-bash-error: command not found
 
 
-## Testing endpoints
+## Testing endpoints security
 
 `curl -i -X POST localhost:8000/2`
 
-It should respond 301. Other endpoint than /[1-3] and other method than POST will return 405 Not allowed.
+It should respond 301. Other endpoint rather than /[1-3] and other method rather than POST will return 405 Not allowed.
