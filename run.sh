@@ -1,4 +1,5 @@
 #!/bin/sh
+
 printf "verifing Requirements.\n"
 unameOut="$(uname -s)"
 case "${unameOut}" in
@@ -32,7 +33,7 @@ command -v docker-compose --version >/dev/null 2>&1 || { echo >&2 "docker-compos
 printf "Docker-compose OK .\n"
 echo "Creating secret"
 docker pull sentry
-sed -i "s/{{secret}}/$(docker run --rm sentry config generate-secret-key)/" docker-compose.yml
+sed -i "s/{{secret}}/$(docker run --rm sentry config generate-secret-key)/" .env
 echo "Running stack..."
 docker-compose up -d
 echo "Creating Db and User"
