@@ -38,10 +38,20 @@ services:
     volumes:
       - sentry-postgres:/var/lib/postgresql/data
 
-  web:
+  sentry:
     <<: *defaults
     ports:
       - '9000:9000'
+
+  web:
+    nginx:
+    image: nginx:latest
+    links:
+    - sentry
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8000:80
 
   cron:
     <<: *defaults
