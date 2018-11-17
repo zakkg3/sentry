@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 printf "verifing Requirements.\n"
 unameOut="$(uname -s)"
@@ -11,7 +11,7 @@ case "${unameOut}" in
 esac
 echo Machine ${machine} detected
 
-if [ ${machine} == "Mac" ]; then
+if [ ${machine} == "Mac" ] ; then
   docker info --format "{{.OperatingSystem}}" | grep -q "Docker for Mac"
   if [[ $? -eq 0 ]]; then
       echo "Docker for Mac!"
@@ -19,7 +19,7 @@ if [ ${machine} == "Mac" ]; then
       echo "Docker for mac not detected. Aborting."
       exit 1;
   fi
-elif [ ${machine} == "Linux" ]; then
+elif [ ${machine} == "Linux" ] ; then
   if [ `sudo systemctl is-active docker` = "active" ];
    then
      echo "Docker for Linux"
@@ -31,14 +31,25 @@ fi
 printf "Docker OK..."
 command -v docker-compose --version >/dev/null 2>&1 || { echo >&2 "docker-compose not found.  Aborting."; exit 1; }
 printf "Docker-compose OK .\n"
-echo "Creating secret"
-docker pull sentry
-sed -i "s/{{secret}}/$(docker run --rm sentry config generate-secret-key)/" .env
+
+if [ $1 == "--init" ] ; then
+  echo "running initialization"
+  echo "Creating secret"
+  docker pull sentry
+  sed -i "s/{{secret}}/$(docker run --rm sentry config generate-secret-key)/" .env
+  echo "creating volumes"
+  docker volume create --name=sentry-data && docker volume create --name=sentry-postgres
+fi
+
+
 echo "Running stack..."
 docker-compose up -d
-echo "Creating Db and User"
-docker-compose exec sentry sentry upgrade
-echo "Restarting server"
-docker-compose restart sentry
+
+if [ $1 == "--init" ] ; then
+  echo "Creating Db and User"
+  docker-compose exec sentry sentry upgrade
+  echo "Restarting server"
+  docker-compose restart sentry
+fi
 echo "Nginx reverse-proxying in localhost:8000"
 #TO-DO if there is arguments install docker-compose exec sentry pip install sentry-slack
